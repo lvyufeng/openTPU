@@ -19,5 +19,6 @@ time from the builder's own Vivado install.
 | `tests/data/qwen36_chat_template.jinja`, `tools/pf500_models/Qwen3.6-35B-A3B/config.json` | The Qwen3.6-35B-A3B checkpoint's chat template and configuration (Alibaba Cloud), unmodified | Apache-2.0 |
 | `tests/data/lfm2_chat_template.jinja` | The LFM2-2.6B checkpoint's chat template (Liquid AI, Inc.), unmodified | LFM Open License v1.0, a copy at `tests/data/LFM_OPEN_LICENSE_v1.0.txt` |
 | `asic/nangate45/openlayout/skills/` | see its own `LICENSE` | as stated there |
+| [tools/packed_oracle/formats.py](<tools/packed_oracle/formats.py>) | Supplied-packed Q2_0/Q8_0 scalar mathematics adapted from Strata revision `3142b66b96e9c0e775e30f620b11b191a1427c2a`, with recorded ggml derivation. See the [source anchors and modification record](<tools/packed_oracle/ATTRIBUTION.md>). | MIT: complete [Strata notice](<tools/packed_oracle/licenses/STRATA-MIT.txt>), [ggml notice](<tools/packed_oracle/licenses/GGML-MIT.txt>) and [modification notice](<tools/packed_oracle/licenses/MODIFICATIONS-MIT.txt>). Independent generator, fixture/tests, CLI, documentation and CI remain Apache-2.0; they are not included in this MIT adaptation scope. |
 
 Model weights are not in this repository; each checkpoint's licence applies to its use.
