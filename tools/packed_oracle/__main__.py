@@ -1,7 +1,13 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright (c) 2026 lvyufeng and the openTPU contributors
 
-"""Stdlib CLI for inert packed-byte reference inputs, not device operations."""
+"""Stdlib CLI for inert packed-byte reference inputs, not device operations.
+
+``decode``/``dot``/``verify``/``generate`` cover the supplied Q2_0/Q8_0
+oracle; the ``iq-*`` commands cover the IQ2_XXS/IQ2_S/IQ1_M row against
+Q8_K activations, and ``iq-rtl-generate``/``iq-rtl-verify`` cover the
+integer-only RTL vector bundle.  Nothing here touches a device.
+"""
 
 from __future__ import annotations
 
@@ -19,6 +25,8 @@ MAX_FIXTURE_BYTES = 8 * 1024 * 1024
 MAX_JSON_DEPTH = 64
 MAX_JSON_NUMBER_CHARS = 64
 DEFAULT_FIXTURE = Path(__file__).with_name("data") / "q2_q8_synthetic.json"
+DEFAULT_IQ_FIXTURE = Path(__file__).with_name("data") / "iq_synthetic.json"
+DEFAULT_IQ_RTL_BUNDLE = Path(__file__).with_name("data") / "iq_rtl_vectors.json"
 _INTEGER = re.compile(r"[1-9][0-9]*", flags=re.ASCII)
 
 
@@ -131,7 +139,10 @@ def _result_envelope(result: dict) -> dict:
 def _parser() -> _Parser:
     parser = _Parser(
         prog="python -m tools.packed_oracle",
-        description="Source-only Q2_0/Q8_0 supplied-packed scalar references; no devices.",
+        description=(
+            "Source-only supplied-packed scalar references (Q2_0/Q8_0 and "
+            "IQ2_XXS/IQ2_S/IQ1_M against Q8_K); no devices."
+        ),
         allow_abbrev=False,
     )
     commands = parser.add_subparsers(dest="command", required=True)
@@ -149,6 +160,28 @@ def _parser() -> _Parser:
     verify_parser.add_argument("fixture", nargs="?", type=Path, default=DEFAULT_FIXTURE)
     generate_parser = commands.add_parser("generate", allow_abbrev=False)
     generate_parser.add_argument("--stdout", action="store_true", required=True)
+    # IQ2_XXS / IQ2_S / IQ1_M against Q8_K.  Kept as separate subcommands so the
+    # original Q2_0/Q8_0 defaults and their shipped fixture stay untouched.
+    iq_decode_parser = commands.add_parser("iq-decode", allow_abbrev=False)
+    iq_decode_parser.add_argument("--format", required=True)
+    iq_decode_parser.add_argument("--elements", required=True)
+    iq_decode_parser.add_argument("--hex", required=True)
+    iq_dot_parser = commands.add_parser("iq-dot", allow_abbrev=False)
+    iq_dot_parser.add_argument("--weight-format", required=True)
+    iq_dot_parser.add_argument("--activation-format", default="Q8_K")
+    iq_dot_parser.add_argument("--elements", required=True)
+    iq_dot_parser.add_argument("--weight-hex", required=True)
+    iq_dot_parser.add_argument("--activation-hex", required=True)
+    iq_verify_parser = commands.add_parser("iq-verify", allow_abbrev=False)
+    iq_verify_parser.add_argument("fixture", nargs="?", type=Path, default=DEFAULT_IQ_FIXTURE)
+    iq_generate_parser = commands.add_parser("iq-generate", allow_abbrev=False)
+    iq_generate_parser.add_argument("--stdout", action="store_true", required=True)
+    iq_rtl_verify_parser = commands.add_parser("iq-rtl-verify", allow_abbrev=False)
+    iq_rtl_verify_parser.add_argument(
+        "bundle", nargs="?", type=Path, default=DEFAULT_IQ_RTL_BUNDLE
+    )
+    iq_rtl_generate_parser = commands.add_parser("iq-rtl-generate", allow_abbrev=False)
+    iq_rtl_generate_parser.add_argument("--stdout", action="store_true", required=True)
     return parser
 
 
@@ -156,7 +189,7 @@ def main(argv: list[str] | None = None) -> int:
     """Return 0 for success, 1 for valid fixture mismatches, 2 for input errors."""
     try:
         options = _parser().parse_args(argv)
-        if options.command in ("decode", "dot"):
+        if options.command in ("decode", "dot", "iq-decode", "iq-dot"):
             # FormatError subclasses ValueError, which argparse's type converter
             # would otherwise swallow and relabel as invalid_arguments.
             options.elements = _elements(options.elements)
@@ -172,6 +205,21 @@ def main(argv: list[str] | None = None) -> int:
                 activation_format=options.activation_format,
             )
             _emit(_result_envelope(result))
+        elif options.command in ("iq-decode", "iq-dot"):
+            from .iq_formats import decode as iq_decode
+            from .iq_formats import dot as iq_dot
+
+            if options.command == "iq-decode":
+                result = iq_decode(options.format, parse_hex(options.hex), options.elements)
+            else:
+                result = iq_dot(
+                    options.weight_format,
+                    parse_hex(options.weight_hex),
+                    parse_hex(options.activation_hex),
+                    options.elements,
+                    activation_format=options.activation_format,
+                )
+            _emit(_result_envelope(result))
         elif options.command == "verify":
             # Lazy import: ordinary decode/dot need no fixture generation code.
             from .vectors import verify_fixture
@@ -179,6 +227,26 @@ def main(argv: list[str] | None = None) -> int:
             report = verify_fixture(_load_fixture(options.fixture))
             _emit(report)
             return 0 if report["verified"] else 1
+        elif options.command == "iq-verify":
+            from .iq_vectors import verify_fixture as verify_iq_fixture
+
+            report = verify_iq_fixture(_load_fixture(options.fixture))
+            _emit(report)
+            return 0 if report["verified"] else 1
+        elif options.command == "iq-rtl-verify":
+            from .iq_vectors import verify_rtl_bundle
+
+            report = verify_rtl_bundle(_load_fixture(options.bundle))
+            _emit(report)
+            return 0 if report["verified"] else 1
+        elif options.command == "iq-generate":
+            from .iq_vectors import generate_fixture as generate_iq_fixture
+
+            _emit(generate_iq_fixture())
+        elif options.command == "iq-rtl-generate":
+            from .iq_vectors import generate_rtl_bundle
+
+            _emit(generate_rtl_bundle())
         else:
             from .vectors import generate_fixture
 

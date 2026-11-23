@@ -1,0 +1,855 @@
+{
+  "activations": {
+    "Q8_K": {
+      "block_bytes": 292,
+      "block_elements": 256,
+      "block_scale": "fp32",
+      "layout": [
+        {
+          "bytes": 4,
+          "field": "d",
+          "offset": 0
+        },
+        {
+          "bytes": 256,
+          "field": "qs",
+          "offset": 4
+        },
+        {
+          "bytes": 32,
+          "field": "bsums",
+          "offset": 260
+        }
+      ],
+      "subblock_elements": 16
+    }
+  },
+  "arithmetic_id": "strata-generic-f32-rne-separate-v1",
+  "cases": [
+    {
+      "activation_format": "Q8_K",
+      "activation_hex": "0000803f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f7d007d007d007d007d007d007d007d007d007d007d007d007d007d007d007d00000080bf000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "elements": 512,
+      "expected_fp32_bits": "0xbbb61800",
+      "expected_integer_subdots": [
+        [
+          [
+            -11654
+          ],
+          [
+            -34962
+          ],
+          [
+            -58270
+          ],
+          [
+            -81578
+          ],
+          [
+            -104886
+          ],
+          [
+            -128194
+          ],
+          [
+            -151502
+          ],
+          [
+            -174810
+          ]
+        ],
+        [
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ]
+      ],
+      "id": "iq2-xxs-extremes",
+      "integer_subdot_fields": [
+        "grid"
+      ],
+      "weight_format": "IQ2_XXS",
+      "weight_hex": "010000ff00ff803fe00f00ff00ff803fe01f00ff00ff803fe02f00ff00ff803fe03f00ff00ff803fe04f00ff00ff803fe05f00ff00ff803fe06f00ff00ff803fe07fff7bffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    {
+      "activation_format": "Q8_K",
+      "activation_hex": "0c4a4588cac23e3f12e9414acac989bb1977aa8ec5c7572b9190adb04a7d3ad39629190068a35f53c5c54426c97cb8be9e40282bd19325e95b61bcd5e5d9ee4e3c7da0996d50e85e06a867951ca6af7fb14c06ddd3686ccd1d8623647c1f9f42a0dab660c823de513485dc925e75c7ae7641ff9f739c8632b89d8bfff6762b69f5f66b723b2dc857c91b32c695622da224578ff134f6fdca96526360541c7ab9080c9f2fd80b2e2fd2418f7248f545bc6c8d3df73ade4e19984e906d7ee7e10bc3f11247b00aeaa268fbb9b3398e6bb45e11f62f061f5f3c26c4b5c256439cf29b7c4733e53aecf3d7a8e43a01604b06847d90973224b0e6dbae3af4060a494fbf9183752eff38ff9d00abff7d00aa00deff6e0024002101bf00c0008fffd90075ff93ffdfea078a8bb0d5fa1f44698eb3d8fd22476c91b6db00254a6f94b9de03284d7297bce1062b50759abfe4092e53789dc2e70c31567ba0c5ea0f34597ea3c8ed12375c81a6cbf0153a5f84a9cef3183d6287acd1f61b40658aafd4f91e43688db2d7fc21466b90b5daff24496e93b8dd02274c7196bbe0052a4f7499bee3082d52779cc1e60b30557a9fc4e90e33587da2c7ec11365b80a5caef14395e83a8cdf2173c6186abd0f51a3f6489aed3f81d42678cb1d6fb20456a8fb4d9fe23486d92b7dc01264b7095badf04294e7398bde2072c51769bc0e50a2f54799ec3e80d32577ca1c6eb10355a7fa4c9ee13385d82a7ccf1163b6085aacff4193e6388add2f71c416608ff08000801080008ff080008000800080108ff08ff08000801080008000800",
+      "elements": 512,
+      "expected_fp32_bits": "0x11dd9af7",
+      "expected_integer_subdots": [
+        [
+          [
+            -167814
+          ],
+          [
+            20503
+          ],
+          [
+            59884
+          ],
+          [
+            -1688
+          ],
+          [
+            277179
+          ],
+          [
+            8379
+          ],
+          [
+            -2660
+          ],
+          [
+            -29308
+          ]
+        ],
+        [
+          [
+            -52137
+          ],
+          [
+            169533
+          ],
+          [
+            40807
+          ],
+          [
+            41867
+          ],
+          [
+            -10875
+          ],
+          [
+            99441
+          ],
+          [
+            227056
+          ],
+          [
+            -5388
+          ]
+        ]
+      ],
+      "id": "iq2-xxs-random",
+      "integer_subdot_fields": [
+        "grid"
+      ],
+      "weight_format": "IQ2_XXS",
+      "weight_hex": "27cf3fa559693ff4634d9e098697be2babe13a61feac8bd34e5231b892296dc8da08bf6b73140e0740a61f2e491a63edf219dff27ea64e7b340fdb34386ee2bf108e2c9416241c31ee6d55411c1c9c2c1ccac8d43ba5301cf2330569ea108fedef248d3aa8b51a452941fbc0009465c5e61840ddcd02ba172e11c8bd4d99ef71fdd13707"
+    },
+    {
+      "activation_format": "Q8_K",
+      "activation_hex": "0000804408080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808800080008000800080008000800080008000800080008000800080008000800000008044f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f880ff80ff80ff80ff80ff80ff80ff80ff80ff80ff80ff80ff80ff80ff80ff80ff0000803f010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000",
+      "elements": 768,
+      "expected_fp32_bits": "0x3f800000",
+      "expected_integer_subdots": [
+        [
+          [
+            2048
+          ],
+          [
+            2048
+          ],
+          [
+            2048
+          ],
+          [
+            2048
+          ],
+          [
+            2048
+          ],
+          [
+            2048
+          ],
+          [
+            2048
+          ],
+          [
+            2048
+          ]
+        ],
+        [
+          [
+            -2048
+          ],
+          [
+            -2048
+          ],
+          [
+            -2048
+          ],
+          [
+            -2048
+          ],
+          [
+            -2048
+          ],
+          [
+            -2048
+          ],
+          [
+            -2048
+          ],
+          [
+            -2048
+          ]
+        ],
+        [
+          [
+            8
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ],
+          [
+            0
+          ]
+        ]
+      ],
+      "id": "iq2-xxs-cancellation",
+      "integer_subdot_fields": [
+        "grid"
+      ],
+      "weight_format": "IQ2_XXS",
+      "weight_hex": "003c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003c00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "activation_format": "Q8_K",
+      "activation_hex": "0000803f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f7d007d007d007d007d007d007d007d007d007d007d007d007d007d007d007d00000080bf000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "elements": 512,
+      "expected_fp32_bits": "0xbbc00a80",
+      "expected_integer_subdots": [
+        [
+          [
+            -1481,
+            -96844
+          ],
+          [
+            -1481,
+            -96844
+          ],
+          [
+            -1481,
+            -96844
+          ],
+          [
+            -1481,
+            -96844
+          ],
+          [
+            -1481,
+            -96844
+          ],
+          [
+            -1481,
+            -96844
+          ],
+          [
+            -1481,
+            -96844
+          ],
+          [
+            -1481,
+            -96844
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      ],
+      "id": "iq2-s-extremes",
+      "integer_subdot_fields": [
+        "low16",
+        "high16"
+      ],
+      "weight_format": "IQ2_S",
+      "weight_hex": "010000ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7f7fe4e4e4e4e4e4e4e4f0f0f0f0f0f0f0f0ff7bffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000ffffffffffffffff0f0f0f0f0f0f0f0f"
+    },
+    {
+      "activation_format": "Q8_K",
+      "activation_hex": "f8180530bde5c759da8ea84928861789d30c6b577e4c3915382efce8cfc9c935f9882e19d48a7aace8d44106e162eb882ae3b3c9ad3911a4acb05f8f327b676c6b5c1908c3e799b5554f979246430286d53567e0c42012ced75ca247cc8e8ac946e6c999854d6cc336430590e91bb5da74c4b47607969867fce09bf5d58e4cc10174cfbf298e9237996807bfb3f700763895a3d7b40280879aebf307a2a5e211147ea527e744c1d57ffdd03fa76cbe375c80d0a5e206efd0ae1385d966d520e0bb92b3ea4177105b76bdb6657509fe321ea678b15034bdd945f38a2756c55c35d37ba0a73ef51241dadad1c99faaf3ed4ff836fe56c96c3fa8e7cca9f9e5404458dd3b350affc000c6fe4d0127ff1bfe04007bfeaefed4fda5ffebfd0c02440078ffd500554485a27f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f807f80f8fff8fff8fff8fff8fff8fff8fff8fff8fff8fff8fff8fff8fff8fff8fff8ff",
+      "elements": 512,
+      "expected_fp32_bits": "0xb4fec7aa",
+      "expected_integer_subdots": [
+        [
+          [
+            -144594,
+            -74472
+          ],
+          [
+            164241,
+            -44727
+          ],
+          [
+            -55692,
+            -66482
+          ],
+          [
+            34175,
+            89243
+          ],
+          [
+            -594471,
+            384250
+          ],
+          [
+            6421,
+            -57551
+          ],
+          [
+            70450,
+            3748
+          ],
+          [
+            -14500,
+            -48411
+          ]
+        ],
+        [
+          [
+            -118153,
+            -198679
+          ],
+          [
+            -507969,
+            -134043
+          ],
+          [
+            -212877,
+            -112425
+          ],
+          [
+            -306675,
+            -52125
+          ],
+          [
+            117441,
+            -25883
+          ],
+          [
+            24970,
+            -550467
+          ],
+          [
+            -201110,
+            -31110
+          ],
+          [
+            78679,
+            -39240
+          ]
+        ]
+      ],
+      "id": "iq2-s-random",
+      "integer_subdot_fields": [
+        "low16",
+        "high16"
+      ],
+      "weight_format": "IQ2_S",
+      "weight_hex": "c32524fe2b1d8d32dccab5713fad42c942f2e9feb3c2b2030ca2c9460b899fa663595846250c6921716b103c646c742a170279593f5d2671490d745f7e4e62380c25830bd92e0eb61163ee8a689cee600c4c3131d956bf94576126848d9ca698582654abb43de860ae28ebac57581ddd02640c6615047c7e100c4e190608233d775f73700a48052a0f582d09431b6d6c060c652d410ab3f1a6164b34f3aacf1c54f52619"
+    },
+    {
+      "activation_format": "Q8_K",
+      "activation_hex": "0000803f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f807f00ff0140c0817e02fe649c03fd7f7d007d007d007d007d007d007d007d007d007d007d007d007d007d007d007d00000080bf000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "elements": 512,
+      "expected_fp32_bits": "0xbb079600",
+      "expected_integer_subdots": [
+        [
+          [
+            -3870,
+            -3750
+          ],
+          [
+            -3870,
+            -3750
+          ],
+          [
+            -3870,
+            -3750
+          ],
+          [
+            -3870,
+            -3750
+          ],
+          [
+            -3870,
+            -3750
+          ],
+          [
+            -3870,
+            -3750
+          ],
+          [
+            -3870,
+            -3750
+          ],
+          [
+            -3870,
+            -3750
+          ]
+        ],
+        [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      ],
+      "id": "iq1-m-extremes",
+      "integer_subdot_fields": [
+        "grid",
+        "delta"
+      ],
+      "weight_format": "IQ1_M",
+      "weight_hex": "00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ffffffffffffffffffffffffffffffffffff1fff0fff0fff0fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000000000000000000000000000000f000f000b00070"
+    },
+    {
+      "activation_format": "Q8_K",
+      "activation_hex": "23f2f71aad5411c5f713129b2edad47f8f777c60451923bb550d3e81c93eb83b561087f0d61ac92981e7624869634db2dfbb0a263e690b40c040b490e0f472a59e01f711a1f2ab9004095604370cf1d8ce29fbbe076a32a2d6c3d5bbb503bb00ee986050594713431287b34f41d8c28dac9acd70f2ae2e05bc0410e543ea499a4495dc8dd8b85c97b6f2b5b8a1a1fa4ec6e58d88489fb12a391c96a3a21d5d89d60fe5f5d865d615e414e5f6482726b882a476c52251e630da14ab87e68902f7a8eb4d3cbe42d4e442c404ed22905078190791f6e35a9b542f2ba6b81a843e5fbf0591e8823d86edcfd2e2151605ffa75463e8fea2c93023735b739c79f1caa0d47f882dcb0034008900c8fff1fe17ff7cffdafee2fcb4fea9ff2dffd0ff5cff28ff77006ba097928bb0d5fa1f44698eb3d8fd22476c91b6db00254a6f94b9de03284d7297bce1062b50759abfe4092e53789dc2e70c31567ba0c5ea0f34597ea3c8ed12375c81a6cbf0153a5f84a9cef3183d6287acd1f61b40658aafd4f91e43688db2d7fc21466b90b5daff24496e93b8dd02274c7196bbe0052a4f7499bee3082d52779cc1e60b30557a9fc4e90e33587da2c7ec11365b80a5caef14395e83a8cdf2173c6186abd0f51a3f6489aed3f81d42678cb1d6fb20456a8fb4d9fe23486d92b7dc01264b7095badf04294e7398bde2072c51769bc0e50a2f54799ec3e80d32577ca1c6eb10355a7fa4c9ee13385d82a7ccf1163b6085aacff4193e6388add2f71c416608ff08000801080008ff080008000800080108ff08ff08000801080008000800",
+      "elements": 512,
+      "expected_fp32_bits": "0x99b5b828",
+      "expected_integer_subdots": [
+        [
+          [
+            -5746,
+            4223
+          ],
+          [
+            3095,
+            567
+          ],
+          [
+            405,
+            -3088
+          ],
+          [
+            -1063,
+            -536
+          ],
+          [
+            3598,
+            -1154
+          ],
+          [
+            -981,
+            -3948
+          ],
+          [
+            -2593,
+            516
+          ],
+          [
+            -111,
+            4145
+          ]
+        ],
+        [
+          [
+            3032,
+            -1664
+          ],
+          [
+            3894,
+            -6784
+          ],
+          [
+            -2268,
+            -504
+          ],
+          [
+            -3364,
+            -80
+          ],
+          [
+            1267,
+            -1040
+          ],
+          [
+            1101,
+            1408
+          ],
+          [
+            -3618,
+            2184
+          ],
+          [
+            1002,
+            -2688
+          ]
+        ]
+      ],
+      "id": "iq1-m-random",
+      "integer_subdot_fields": [
+        "grid",
+        "delta"
+      ],
+      "weight_format": "IQ1_M",
+      "weight_hex": "84b5b2e879cec75f1fc28fb02961b7744e27752d08b066863865bb978c18737d4ff6e3e9278284216ec35605a939e890232caca81e3f8607dfce00e403c6304282f655b36b5611bd2c38afe7abdda8387ec0f3a65d6ae3b1b2a6b13ef2c9d8708813095901a559d12ffe9b43c1c70c8f"
+    }
+  ],
+  "fixture_id": "iq-packed-rtl-integer-v1",
+  "formats": {
+    "IQ1_M": {
+      "activation_block_bytes": 292,
+      "activation_format": "Q8_K",
+      "block_bytes": 56,
+      "block_elements": 256,
+      "block_scale": "fp16-packed",
+      "delta_flags_per_group": 4,
+      "final_scale_fp32": null,
+      "ggml_type": 29,
+      "grid_entries": 2048,
+      "grid_index_bits": 11,
+      "group_scale_bits": 3,
+      "group_scale_levels": 8,
+      "group_scales": 8,
+      "index_high_bits": 3,
+      "integer_subdot_fields": [
+        "grid",
+        "delta"
+      ],
+      "layout": [
+        {
+          "bytes": 32,
+          "field": "qs",
+          "offset": 0
+        },
+        {
+          "bytes": 16,
+          "field": "qh",
+          "offset": 32
+        },
+        {
+          "bytes": 8,
+          "field": "scales",
+          "offset": 48
+        }
+      ],
+      "sign_table_entries": 0,
+      "subblock_elements": 32,
+      "subblocks": 8
+    },
+    "IQ2_S": {
+      "activation_block_bytes": 292,
+      "activation_format": "Q8_K",
+      "block_bytes": 82,
+      "block_elements": 256,
+      "block_scale": "fp16",
+      "delta_flags_per_group": 0,
+      "final_scale_fp32": "0x3e000000",
+      "ggml_type": 22,
+      "grid_entries": 1024,
+      "grid_index_bits": 10,
+      "group_scale_bits": 4,
+      "group_scale_levels": 16,
+      "group_scales": 8,
+      "index_high_bits": 2,
+      "integer_subdot_fields": [
+        "low16",
+        "high16"
+      ],
+      "layout": [
+        {
+          "bytes": 2,
+          "field": "d",
+          "offset": 0
+        },
+        {
+          "bytes": 64,
+          "field": "qs",
+          "offset": 2
+        },
+        {
+          "bytes": 8,
+          "field": "qh",
+          "offset": 66
+        },
+        {
+          "bytes": 8,
+          "field": "scales",
+          "offset": 74
+        }
+      ],
+      "sign_table_entries": 128,
+      "subblock_elements": 32,
+      "subblocks": 8
+    },
+    "IQ2_XXS": {
+      "activation_block_bytes": 292,
+      "activation_format": "Q8_K",
+      "block_bytes": 66,
+      "block_elements": 256,
+      "block_scale": "fp16",
+      "delta_flags_per_group": 0,
+      "final_scale_fp32": "0x3e000000",
+      "ggml_type": 16,
+      "grid_entries": 256,
+      "grid_index_bits": 8,
+      "group_scale_bits": 4,
+      "group_scale_levels": 16,
+      "group_scales": 8,
+      "index_high_bits": 0,
+      "integer_subdot_fields": [
+        "grid"
+      ],
+      "layout": [
+        {
+          "bytes": 2,
+          "field": "d",
+          "offset": 0
+        },
+        {
+          "bytes": 64,
+          "field": "qs",
+          "offset": 2
+        }
+      ],
+      "sign_table_entries": 128,
+      "subblock_elements": 32,
+      "subblocks": 8
+    }
+  },
+  "payload_sha256": "0cefcf13c276569790780ce7ab30026e666007269531c60b550e119f3ab0612f",
+  "provenance": {
+    "expected_derivation": "independent exact-rational binary32 RNE transcription of pinned ggml dequant and integer group-dot kernels; not a DUT output",
+    "generator": {
+      "id": "iq-fraction-integer-reference",
+      "independent_reference": "tools/packed_oracle/iq_vectors.py",
+      "production_path_under_test": "tools/packed_oracle/iq_formats.py",
+      "version": 1
+    },
+    "ggml": {
+      "anchors": [
+        {
+          "end_line": 1337,
+          "path": "engine/third_party/strata-llama/ggml/src/ggml-common.h",
+          "start_line": 1323
+        },
+        {
+          "end_line": 1441,
+          "path": "engine/third_party/strata-llama/ggml/src/ggml-common.h",
+          "start_line": 1376
+        },
+        {
+          "end_line": 1833,
+          "path": "engine/third_party/strata-llama/ggml/src/ggml-common.h",
+          "start_line": 1576
+        },
+        {
+          "end_line": 2470,
+          "path": "engine/third_party/strata-llama/ggml/src/ggml-common.h",
+          "start_line": 1957
+        },
+        {
+          "end_line": 946,
+          "path": "engine/third_party/strata-llama/ggml/src/ggml-cpu/quants.c",
+          "start_line": 906
+        },
+        {
+          "end_line": 1048,
+          "path": "engine/third_party/strata-llama/ggml/src/ggml-cpu/quants.c",
+          "start_line": 998
+        },
+        {
+          "end_line": 1252,
+          "path": "engine/third_party/strata-llama/ggml/src/ggml-cpu/quants.c",
+          "start_line": 1193
+        },
+        {
+          "end_line": 2512,
+          "path": "engine/third_party/strata-llama/ggml/src/ggml-quants.c",
+          "start_line": 2488
+        },
+        {
+          "end_line": 2577,
+          "path": "engine/third_party/strata-llama/ggml/src/ggml-quants.c",
+          "start_line": 2543
+        },
+        {
+          "end_line": 2714,
+          "path": "engine/third_party/strata-llama/ggml/src/ggml-quants.c",
+          "start_line": 2675
+        }
+      ],
+      "header": "engine/third_party/strata-llama/ggml/src/ggml-common.h",
+      "header_sha256": "0061131b615c5721fc88a78feeb22c1f8c450f1c2646a317d80796a653bf595c",
+      "repository": "https://github.com/ggml-org/llama.cpp",
+      "revision": "3cf03257f219afbe7334045ff7c6a06ac68c627d"
+    },
+    "opentpu_base": {
+      "repository": "https://github.com/lvyufeng/openTPU",
+      "revision": "d84db55712aba0d40811d7762cb052f05d55b7e5"
+    },
+    "scope_exclusions": [
+      "real model weights or tokenizer data",
+      "native ggml/Strata/Metal execution",
+      "RTL simulation, synthesis, or on-device results",
+      "quantizer round-trip or perplexity evaluation",
+      "timing, throughput, or hardware performance numbers"
+    ],
+    "strata": {
+      "anchors": [
+        {
+          "end_line": 376,
+          "path": "engine/include/strata/quant/strata-quant-common.h",
+          "start_line": 376
+        },
+        {
+          "end_line": 393,
+          "path": "engine/include/strata/quant/strata-quant-common.h",
+          "start_line": 393
+        },
+        {
+          "end_line": 427,
+          "path": "engine/include/strata/quant/strata-quant-common.h",
+          "start_line": 427
+        },
+        {
+          "end_line": 434,
+          "path": "engine/include/strata/quant/strata-quant-common.h",
+          "start_line": 434
+        },
+        {
+          "end_line": 513,
+          "path": "engine/include/strata/quant/strata-quant-common.h",
+          "start_line": 499
+        },
+        {
+          "end_line": 617,
+          "path": "engine/include/strata/quant/strata-quant-common.h",
+          "start_line": 552
+        },
+        {
+          "end_line": 1009,
+          "path": "engine/include/strata/quant/strata-quant-common.h",
+          "start_line": 752
+        },
+        {
+          "end_line": 1133,
+          "path": "engine/include/strata/quant/strata-quant-common.h",
+          "start_line": 1128
+        },
+        {
+          "end_line": 1646,
+          "path": "engine/include/strata/quant/strata-quant-common.h",
+          "start_line": 1646
+        }
+      ],
+      "header": "engine/include/strata/quant/strata-quant-common.h",
+      "header_sha256": "0709a7a826c1c8c73d814b8362818b6108d37c119257b97df9824b3053d08a1a",
+      "repository": "https://github.com/lvyufeng/Strata",
+      "revision": "3142b66b96e9c0e775e30f620b11b191a1427c2a"
+    },
+    "tables": {
+      "data_not_code": true,
+      "excluded": "iq1s_grid_gpu (GPU-only value+1 layout is not reference semantics)",
+      "license": "MIT",
+      "module": "tools/packed_oracle/iq_tables.py",
+      "sha256": {
+        "iq1s_grid": "07540ffc1aeaf6ad4d97e96b0fcc765aae39671d4ae4a27bbd0e796fde167c6a",
+        "iq2s_grid": "e1aa1473412b0552c2174c30ef22ab4073f6a181b85a17056e8249bd2932fd88",
+        "iq2xxs_grid": "05826b5d3e472a3a78f196be62ac78acf81df0f909626e12ab9fa2a5d490dd54",
+        "kmask_iq2xs": "5ac9831b2e30eb285ef34f8501620f878432d5c04331ad1ae47f977a83ba41a5",
+        "ksigns_iq2xs": "a76742a603f8beca5212ecce0f1f02f11a4887fd2f7c8b15aca0ea3eb3380c31"
+      }
+    }
+  },
+  "schema_version": 1,
+  "synthetic": true
+}
