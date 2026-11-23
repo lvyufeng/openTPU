@@ -1156,6 +1156,9 @@ module otpu_iq2s (
   // eight magnitude x int8 products, magnitude negated where the sign bit is set; the sum is exact.
   // The operands are widened to int16 before the multiply so the product is exact whatever the
   // tool's context-sizing rules are: the widest is 43 * 128 = 5504, far inside int16.
+  // The result is assigned to the function name instead of using `return`, because the
+  // conda-forge Yosys 0.71 build used for generic estimates does not parse `return`; the
+  // construct is equivalent in SystemVerilog, and Verilator accepts both.
   function automatic logic signed [17:0] dot8(input logic [63:0] mag_v,
                                               input logic [7:0]  sign_v,
                                               input logic [63:0] act_v);
@@ -1169,7 +1172,7 @@ module otpu_iq2s (
       p = m * x;                                                // <= 5504, exact in int16
       acc = acc + 18'(p);
     end
-    return acc;
+    dot8 = acc;
   endfunction
 
   always_comb begin

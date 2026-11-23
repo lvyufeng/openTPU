@@ -203,11 +203,48 @@ reference path is the caller's `0.125 * d * d_act` fold, applied to a sum of exa
 - **Multipliers.** 32 products of a 6-bit magnitude and an int8 a cycle in the product path,
   plus two 5 x 18 multipliers for the scale application. On 7-series a DSP48E1 could pack two
   8 x 8 products, suggesting roughly 16-18 DSPs, or about 1.5-2K LUTs if built in logic.
-- **Estimated, not measured.** No synthesis or timing run was done for this module, so these are
-  sizing estimates only; there is no area, frequency or utilisation report. The ROM is written as
-  a simulation-visible `initial` block (plain `logic [63:0] rom [0:1023]` with asynchronous
-  reads) because it is the portable way to write a table and Verilator can load it; a
-  technology wrapper can replace it with a generated ROM later without touching the datapath.
+- **Mapping, not a QoR claim.** The ROM is written as a simulation-visible `initial` block (plain
+  `logic [63:0] rom [0:1023]` with asynchronous reads) because it is the portable way to write a
+  table and Verilator can load it. A generic open-source mapping is recorded below; it is not a
+  device timing/utilisation result and no vendor tool was used.
+
+## Generic resource mapping (estimate)
+
+For a rough size check — **not** a device synthesis, placement, timing or power result — the
+module was run through the open-source generic Xilinx-family mapping on 2026-11-24:
+
+    yosys -p "read_verilog -sv rtl/vpu/otpu_iq2s.sv; \
+        synth_xilinx -family xc7 -top otpu_iq2s; stat"
+
+with `Yosys 0.71+ (git sha1 10084e2a1, conda-forge)` on the same user-local EDA install as
+Verilator; command log sha256 `337dda2457704f9b44db5e48c1ad2189a24c47d8d10d90a2ca36aa846ede0954`.
+After mapping the design is 5,749 cells:
+
+| Cell | Count | Cell | Count |
+|---|---:|---|---:|
+| DSP48E1 | 34 | FDRE | 830 |
+| LUT2 | 975 | LUT3 | 319 |
+| LUT4 | 565 | LUT5 | 1,899 |
+| LUT6 | 534 | CARRY4 | 37 |
+| MUXF7 | 18 | MUXF8 | 7 |
+| BUFG | 1 | IBUF / OBUF | 324 / 201 |
+
+Yosys reports "Estimated number of LCs: 3363". There is no `RAMB36`/`RAMB18`: this flow
+implemented the 8 KiB grid ROM as distributed LUT logic, which is a large part of the LUT
+count. The 34 DSPs are the 32 magnitude x int8 products plus the two scale multipliers,
+which matches the hand estimate above.
+
+Caveats, all of which matter before believing any number: this is unplaced, unrouted generic
+mapping with no constraints, no clock period and no Xilinx primitives/IP; the top-level I/O
+buffers are inferred from unconstrained ports, so they are not a board interface; a real
+implementation with block-RAM inference for the ROM, pipelining and timing-driven mapping will
+differ. Do not quote these as utilisation or Fmax. No synthesis was run in Vivado (not
+installed, not authorised) and no bitstream exists.
+
+The `dot8()` function assigns its result to the function name rather than using `return`
+because the conda-forge Yosys 0.71 build used here does not parse `return` inside a function;
+the two forms are equivalent and Verilator accepts both, and the Verilator dump is byte-identical
+before and after that edit on the 256-case driver run.
 
 ## What is not done
 
@@ -216,8 +253,8 @@ reference path is the caller's `0.125 * d * d_act` fold, applied to a sum of exa
   choice of who applies `0.125 * d` and how the eight partials are accumulated across blocks,
   are later #8 slices.
 - No float: the caller must scale the partials and sum them; this module stops at integers.
-- No synthesis, placement or timing run, and no measured area, frequency or power (the numbers
-  above are estimates).
+- No vendor synthesis, placement or timing run and no measured frequency or power; the
+  generic mapping above is an estimate only, and is not a device utilisation report.
 - No device test, no bitstream and no card measurement.
 - One block at a time: the store is single-buffered and the two phases do not overlap, so there
   is no double-buffered weight stream and no pipelining of blocks. If the caller's activation
@@ -240,6 +277,11 @@ and exits non-zero on failure. Build only, by hand:
     verilator --binary --timing --top-module tb_iq -j 0 -Wno-fatal -O3 \
         --Mdir build/iq_rtl sim/verilator/tb_iq.sv rtl/vpu/otpu_iq2s.sv
     build/iq_rtl/Vtb_iq +vectors=build/iq_rtl/vectors.hex +out=build/iq_rtl/dump.txt
+
+Generic mapping estimate only (open-source Yosys, not a device synthesis):
+
+    yosys -p "read_verilog -sv rtl/vpu/otpu_iq2s.sv; \
+        synth_xilinx -family xc7 -top otpu_iq2s; stat"
 
 ## Sources
 
