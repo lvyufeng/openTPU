@@ -16,10 +16,11 @@
 // the four 10-bit grid indices with sub-block l = 0 in the low bits.
 //
 // The checks here are protocol and wiring, not arithmetic: 19 accepted cycles a case (11 weight
-// beats then 8 activation beats), one result per activation beat with grp_idx 0..7 in order, no
-// results while loading, and d, scales, sign bytes, scale multipliers and grid indices equal to the
-// same fields decoded here from the block's bytes. The partials are compared by the driver against
-// its own model (the arithmetic claim is docs/iq_dot.md's, checked there).
+// beats then 8 activation beats, counted from the first weight beat's accepting edge to the last
+// activation beat's), one result per activation beat with grp_idx 0..7 in order, no results while
+// loading, and d, scales, sign bytes, scale multipliers and grid indices equal to the same fields
+// decoded here from the block's bytes. The partials are compared by the driver against its own
+// model (the arithmetic claim is docs/iq_dot.md's, checked there).
 module tb_iq;
   logic clk = 1'b0;
   logic rst = 1'b1;
@@ -50,6 +51,8 @@ module tb_iq;
 
   longint cyc = 0;
   always @(posedge clk) cyc <= cyc + 1;
+  // cyc as it stands after the first weight beat's accepting edge: cycle 0 of the block
+  longint c_first = 0;
 
   // ---- vectors and results
   integer fd_in, fd_out, n, ci, cases, prot_err;
@@ -69,7 +72,7 @@ module tb_iq;
   logic [63:0] o_scales;
 
   // ---- one weight beat: wait for w_ready, hold valid for the accepting edge
-  task automatic w_beat(input logic [63:0] d);
+  task automatic w_beat(input logic [63:0] d, input logic first_beat);
     int tmo;
     begin
       @(negedge clk);
@@ -84,6 +87,7 @@ module tb_iq;
       @(posedge clk);
       #1;
       w_valid = 1'b0;
+      if (first_beat) c_first = cyc;
       // the load phase never has results to hand out
       if (grp_valid !== 1'b0 || blk_valid !== 1'b0) prot_err++;
     end
@@ -125,19 +129,18 @@ module tb_iq;
   // ---- a case: 11 weight beats, 8 activation beats, then the structural checks and the dump
   task automatic run_case;
     int         g, l;
-    longint     c0;
     logic [39:0]  exp_idx;
     logic [31:0]  exp_sign;
     logic [4:0]   exp_ls1, exp_ls2;
     begin
-      c0 = cyc;
       for (int k = 0; k < 11; k++)
-        w_beat({blk_word[2 * k + 1], blk_word[2 * k]});
+        w_beat({blk_word[2 * k + 1], blk_word[2 * k]}, k == 0);
       for (int k = 0; k < 8; k++)
         a_beat({act_word[8 * k + 7], act_word[8 * k + 6], act_word[8 * k + 5], act_word[8 * k + 4],
                 act_word[8 * k + 3], act_word[8 * k + 2], act_word[8 * k + 1], act_word[8 * k]}, k);
-      // 11 + 8 accepted cycles, no wait except the handshake's own
-      if ((cyc - c0) != 19) prot_err++;
+      // 11 + 8 accepted cycles, no wait except the handshake's own: the last activation beat's
+      // accepting edge is cycle 18 counted from the first weight beat's, i.e. 19 accepted cycles
+      if ((cyc - c_first) != 18) prot_err++;
 
       // the metadata the module must have taken from the block's bytes
       if (o_d !== {blk[1], blk[0]}) prot_err++;

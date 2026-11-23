@@ -23,11 +23,12 @@ In short:
   output. It equals the reference float dot exactly — `0.125 * d * sum_g bsum[g]` — because the
   dequantiser's sub-block scale `(0.5 + n) * 0.25` is exactly `(2n + 1) / 8` and the partial
   folds the odd `(2n + 1)` in. No rounding and no saturation anywhere in the partial path.
-- **Verified.** `tools/iq_rtl_check.py --selftest` (table, RTL text, model against the float
-  dequantiser, in exact rationals) passed on the development host. The simulated comparison is
-  `python3 tools/iq_rtl_check.py`; Verilator was not installed on the development host when this
-  was written, so **that run has not been executed here** — the command and its expected verdict
-  are below.
+- **Verified.** `python3 tools/iq_rtl_check.py` ran clean against Verilator 5.054 on the `2080ti`
+  simulation host: 256 cases at seeds `20261124`, `1` and `7`, and 1024 cases at `20261124` —
+  14,386 and 54,322 exact checks, zero mismatches, exit 0, and the testbench's own protocol and
+  cycle-count checks reported `errors=0`. That evidence is RTL simulation only: no synthesis,
+  placement, timing or board run. The `--selftest` mode (table, RTL text, model against the float
+  dequantiser in exact rationals) runs without a simulator and also passed.
 - **Not done.** Not integrated into `otpu_vpu`, the ISA, the sequencer or `opentpu/rtlsim.py`;
   not in `RTL_SOURCES`; no synthesis or timing run; no device test. Sections below say what
   remains for the later #8 slices, #9 and #10.
@@ -117,7 +118,8 @@ Handshake and timing:
 `tools/iq_rtl_check.py` (stdlib only) generates seeded cases, writes a vector file, builds the
 testbench with Verilator and compares its dump field by field with an independent model of the
 format written in the script. The testbench checks the protocol (ready/valid exclusivity between
-the two streams, result strobes, cycle count, and the structural fields it can see in the block
+the two streams, result strobes, the 19 accepted cycles measured from the first weight beat's
+accepting edge to the last activation beat's, and the structural fields it can see in the block
 bytes); the script checks the arithmetic.
 
     python3 tools/iq_rtl_check.py --selftest          # no simulator: table, RTL text, model
@@ -125,7 +127,8 @@ bytes); the script checks the arithmetic.
     python3 tools/iq_rtl_check.py --cases 1024        # more cases
     python3 tools/iq_rtl_check.py --help
 
-It needs Verilator 5.x and a C++ compiler on `PATH` (or `--verilator <path>`); the build goes to
+It needs Verilator 5.x (measured with 5.054) and a C++ compiler on `PATH` (or `--verilator
+<path>`); the build goes to
 the ignored `build/iq_rtl/` (`Vtb_iq`), with the vectors and the raw dump left beside it. No
 Xilinx primitives are involved, so Verilator is the only simulator the module needs. Exit status
 is 0 on success, 1 on a mismatch, and 2 when the tools are missing or the build or run failed.
@@ -154,20 +157,28 @@ the integer-exactness claim above, checked rather than asserted. It checks the R
 the intended width and connected by name in the testbench, and the module must contain no vendor
 primitive, no delay and no simulation system task.
 
-Expected verdict on a machine with Verilator (256 cases; `checks` is `1071` static plus
-`52` per case plus `3`):
+Measured on the `2080ti` simulation host with Verilator 5.054 (a user-local conda-forge build),
+from a clean sync of this tree, one JSON object and exit status per run:
 
-    {"ok": true, "cases": 256, "checks": 14386, "mismatches": [],
-     "seed": 20261124, "verilator": "Verilator 5.x ...",
-     "grid_sha256": "e1aa1473...", "build": "build/iq_rtl", ...}
+| command | `cases` | `checks` | `mismatches` | exit |
+|---|---|---|---|---|
+| `python3 tools/iq_rtl_check.py --cases 256` | 256 | 14,386 | none | 0 |
+| `python3 tools/iq_rtl_check.py --seed 1 --cases 256` | 256 | 14,386 | none | 0 |
+| `python3 tools/iq_rtl_check.py --seed 7 --cases 256` | 256 | 14,386 | none | 0 |
+| `python3 tools/iq_rtl_check.py --seed 20261124 --cases 1024` | 1024 | 54,322 | none | 0 |
 
-**Status.** At the time of writing the development host had no Verilator, so the simulated
-comparison has not been run here; only `--selftest` passed (256 cases, 5188 checks, no
-mismatches). The first `python3 tools/iq_rtl_check.py` run is the simulation evidence for this
-slice. The independent model was additionally cross-checked bit-exactly against the generic
+`checks` is `1071` static plus `52` per case plus `3`. Each run's testbench summary was
+`IQ2STEST cases=<cases> beats=<19 x cases> cycles=<19 x cases + 4> errors=0` (for example
+`IQ2STEST cases=256 beats=4864 cycles=4868 errors=0`), a JSON verdict of
+`{"ok": true, "cases": ..., "checks": ..., "mismatches": [], "seed": ...,
+"verilator": "Verilator 5.054 ...", "grid_sha256": "e1aa1473...", ...}`, and exit 0. The
+independent model had earlier been cross-checked bit-exactly against the generic
 `ggml_vec_dot_iq2_s_q8_K_generic` and against all 256 dequantised floats through a throw-away
 host harness (256 blocks, five seeds); that harness is not committed, so the committed evidence
 path is the script and the testbench.
+
+This is RTL simulation evidence only: there is no synthesis, placement, timing or board evidence
+for this module yet (see "What is not done").
 
 ## Integer exactness
 
@@ -217,8 +228,11 @@ reference path is the caller's `0.125 * d * d_act` fold, applied to a sum of exa
 
 ## Reproduce
 
-    python3 tools/iq_rtl_check.py --selftest
-    python3 tools/iq_rtl_check.py                 # needs Verilator 5.x
+    python3 tools/iq_rtl_check.py --selftest                 # no simulator
+    python3 tools/iq_rtl_check.py --cases 256                # needs Verilator 5.x
+    python3 tools/iq_rtl_check.py --seed 1 --cases 256
+    python3 tools/iq_rtl_check.py --seed 7 --cases 256
+    python3 tools/iq_rtl_check.py --seed 20261124 --cases 1024
 
 `--help` lists `--cases`, `--seed`, `--build`, `--verilator`; the script prints one JSON object
 and exits non-zero on failure. Build only, by hand:
