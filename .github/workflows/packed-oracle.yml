@@ -46,3 +46,21 @@ jobs:
           generated="${RUNNER_TEMP:?}/q2_q8_regenerated.json"
           python -B -S -m tools.packed_oracle generate --stdout > "$generated"
           cmp tools/packed_oracle/data/q2_q8_synthetic.json "$generated"
+      - name: Verify shipped IQ synthetic fixture
+        run: python -B -S -m tools.packed_oracle iq-verify tools/packed_oracle/data/iq_synthetic.json
+      - name: Check deterministic IQ regeneration
+        shell: bash
+        run: |
+          set -euo pipefail
+          generated="${RUNNER_TEMP:?}/iq_regenerated.json"
+          python -B -S -m tools.packed_oracle iq-generate --stdout > "$generated"
+          cmp tools/packed_oracle/data/iq_synthetic.json "$generated"
+      - name: Verify shipped RTL integer vector bundle
+        run: python -B -S -m tools.packed_oracle iq-rtl-verify tools/packed_oracle/data/iq_rtl_vectors.json
+      - name: Check deterministic RTL integer vector regeneration
+        shell: bash
+        run: |
+          set -euo pipefail
+          generated="${RUNNER_TEMP:?}/iq_rtl_regenerated.json"
+          python -B -S -m tools.packed_oracle iq-rtl-generate --stdout > "$generated"
+          cmp tools/packed_oracle/data/iq_rtl_vectors.json "$generated"
