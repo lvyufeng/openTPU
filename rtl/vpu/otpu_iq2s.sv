@@ -32,7 +32,8 @@
 // sub-block l's element j, i.e. activation word bytes 8l..8l+7 dotted with sub-block l). A beat is
 // accepted on the edge where *valid and *ready are high; a group's result is registered on its
 // accepting edge, so grp_valid, grp_idx, grp_bsum, grp_ls1, grp_ls2, grp_signs and grp_index are
-// valid one cycle after the beat. blk_valid, blk_d and blk_scales (bytes 74..81, group g in byte g)
+// valid one cycle after the beat. grp_aux separately exposes ls2 * sumi2 without changing the
+// combined grp_bsum contract. blk_valid, blk_d and blk_scales (bytes 74..81, group g in byte g)
 // come with grp_idx = 0. A block is 11 load cycles and 8 dot cycles: 82 bytes in 19 cycles, 4.32
 // bytes a cycle, a group every cycle in the dot phase. The partial is integer two's complement.
 //
@@ -64,7 +65,8 @@ module otpu_iq2s (
   // per-group partial (valid one cycle after its activation beat)
   output logic         grp_valid,
   output logic [2:0]   grp_idx,      // 0..7
-  output logic [31:0]  grp_bsum,     // int32, two's complement
+  output logic [31:0]  grp_bsum,     // complete scaled group partial (unchanged)
+  output logic [31:0]  grp_aux,      // separate second scaled half: ls2 * sumi2
   output logic [4:0]   grp_ls1,      // 1 + 2 * (scales[g] & 15)
   output logic [4:0]   grp_ls2,      // 1 + 2 * (scales[g] >> 4)
   output logic [31:0]  grp_signs,    // raw sign bytes, l = 0 in bits 7:0
@@ -1135,6 +1137,7 @@ module otpu_iq2s (
   logic signed [17:0] dot_l [4];     // a sub-block's eight products, exact in int18
   logic signed [17:0] sum1_c, sum2_c;
   logic signed [23:0] bsum_c;        // a group's partial, exact in int24
+  logic signed [23:0] aux_c;         // second scaled half, exact in int23
   logic        [5:0]  ls1_w, ls2_w;
   logic        [4:0]  ls1_c, ls2_c;
   logic signed [23:0] ls1_s, ls2_s;
@@ -1188,7 +1191,10 @@ module otpu_iq2s (
     ls2_c  = ls2_w[4:0];
     ls1_s  = signed'(24'(ls1_w));
     ls2_s  = signed'(24'(ls2_w));
-    bsum_c = ls1_s * sum1_c + ls2_s * sum2_c;
+    // Expose the two separately scaled halves expected by the frozen oracle too;
+    // the original combined output remains bsum = scaled_half1 + scaled_half2.
+    aux_c  = ls2_s * sum2_c;
+    bsum_c = ls1_s * sum1_c + aux_c;
   end
 
   // ---- control and result registers
@@ -1200,6 +1206,7 @@ module otpu_iq2s (
       grp_valid  <= 1'b0;
       grp_idx    <= '0;
       grp_bsum   <= '0;
+      grp_aux    <= '0;
       grp_ls1    <= '0;
       grp_ls2    <= '0;
       grp_signs  <= '0;
@@ -1224,6 +1231,7 @@ module otpu_iq2s (
           grp_valid <= 1'b1;
           grp_idx   <= a_cnt;
           grp_bsum  <= {{8{bsum_c[23]}}, bsum_c};
+          grp_aux   <= {{8{aux_c[23]}}, aux_c};
           grp_ls1   <= ls1_c;
           grp_ls2   <= ls2_c;
           grp_signs <= sign_cur;

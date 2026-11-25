@@ -8,12 +8,22 @@ on:
       - '.github/workflows/packed-oracle.yml'
       - 'THIRD_PARTY.md'
       - 'LICENSE'
+      - 'rtl/vpu/otpu_iq*.sv'
+      - 'sim/verilator/tb_iq_stream.sv'
+      - 'tools/iq_multi_rtl_check.py'
+      - 'tools/iq_stream_verify.py'
+      - 'tools/iq_tables.py'
   pull_request:
     paths:
       - 'tools/packed_oracle/**'
       - '.github/workflows/packed-oracle.yml'
       - 'THIRD_PARTY.md'
       - 'LICENSE'
+      - 'rtl/vpu/otpu_iq*.sv'
+      - 'sim/verilator/tb_iq_stream.sv'
+      - 'tools/iq_multi_rtl_check.py'
+      - 'tools/iq_stream_verify.py'
+      - 'tools/iq_tables.py'
   workflow_dispatch:
 
 permissions:
@@ -37,6 +47,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Run stdlib source-only unit tests
         run: python -B -S -m unittest discover -s tools/packed_oracle/tests -v
+      - name: Check IQ stream source, tables and reference-model identities
+        run: python -B -S tools/iq_multi_rtl_check.py --selftest --cases 8 --seed 20261124
       - name: Verify shipped synthetic packed-byte fixture
         run: python -B -S -m tools.packed_oracle verify tools/packed_oracle/data/q2_q8_synthetic.json
       - name: Check deterministic independent regeneration
